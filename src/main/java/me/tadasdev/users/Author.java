@@ -32,8 +32,6 @@ public class Author {
     @Column
     private String last_name;
 
-    @Column
-    private int id_books;
 
 
 

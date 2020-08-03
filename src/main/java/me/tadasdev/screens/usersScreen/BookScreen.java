@@ -24,6 +24,7 @@ import javafx.util.Callback;
 import me.tadasdev.repositories.AuthorRepository;
 import me.tadasdev.repositories.BookRepository;
 import me.tadasdev.screens.MenuScreen;
+import me.tadasdev.screens.infoScreens.BookInfo;
 import me.tadasdev.users.Author;
 import me.tadasdev.users.Book;
 
@@ -35,7 +36,7 @@ public class BookScreen {
 
     public void booksScreen(Stage stage){
 
-        TableView bookTableView = this.bookTableView();
+        TableView bookTableView = this.bookTableView(stage);
 
         Button backButton =  new Button("back");
         backButton.setOnAction(event -> {
@@ -46,14 +47,17 @@ public class BookScreen {
         vBox.getChildren().addAll(backButton);
         vBox.getChildren().add(addSearchBar(stage));
         vBox.getChildren().add(bookTableView);
+        vBox.setMinSize(500,500);
 
         Scene scene = new Scene(vBox);
         stage.setScene(scene);
+        stage.setMinWidth(500);
+        stage.setMinHeight(500);
         stage.show();
 
     }
 
-    public TableView bookTableView(){
+    public TableView bookTableView(Stage stage){
         //TableView<Book> booksTable = this.booksTable;
         ObservableList<Book> booksList = this.booksList;
 
@@ -74,7 +78,7 @@ public class BookScreen {
         author.setMinWidth(80);
 
         //booksTable.getColumns().setAll(id, deleteButton(), descriptions, book);
-        booksTable.getColumns().setAll(id, titleLink(), descriptions, author);
+        booksTable.getColumns().setAll(id, titleLink(stage), descriptions, author);
         booksTable.prefWidth(20);
         booksTable.setItems(booksList);
 
@@ -82,7 +86,7 @@ public class BookScreen {
         return booksTable;
     }
 
-    public TableColumn<Book, String> titleLink(){
+    public TableColumn<Book, String> titleLink(Stage stage){
         TableColumn<Book, String> title = new TableColumn<>("Title");
         title.setCellValueFactory(new PropertyValueFactory<>("title"));
         title.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -101,8 +105,10 @@ public class BookScreen {
                             {
                                 //link.setText();
                                 link.setOnAction(event -> {
+                                    BookInfo bookInfo = new BookInfo();
                                     Book book = getTableView().getItems().get(getIndex());
                                     System.out.println(book.getTitle());
+                                    bookInfo.bookInfo(stage, book);
                                 });
 
                             }

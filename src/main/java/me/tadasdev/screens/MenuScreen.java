@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import me.tadasdev.screens.refactorScreens.AddToLibrary;
 import me.tadasdev.screens.usersScreen.AuthorScreen;
 import me.tadasdev.screens.usersScreen.BookScreen;
 
@@ -22,6 +23,7 @@ public class MenuScreen{
     public static void menuScreen(Stage stage){
         AuthorScreen authorScreen = new AuthorScreen();
         BookScreen bookScreen = new BookScreen();
+        AddToLibrary addToLibrary = new AddToLibrary();
         VBox root = new VBox();
 
         
@@ -56,7 +58,7 @@ public class MenuScreen{
         addToLibraryButton.setMinWidth(200);
         addToLibraryButton.setMinHeight(50);
         addToLibraryButton.setOnAction(event -> {
-
+            addToLibrary.addToLibrary(stage);
         });
 
         Button updateLibraryButton = new Button("Update Library");
@@ -83,6 +85,8 @@ public class MenuScreen{
 
         /*root.getChildren().addAll(head, body);
         root.setAlignment(Pos.CENTER);*/
+
+        root.setMinSize(500,500);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

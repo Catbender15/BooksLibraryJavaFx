@@ -12,14 +12,6 @@ import java.util.List;
 
 public class AuthorRepository {
 
-
-    public static void findById(int id){
-        Session session = SessionManager.getSessionFactory().openSession();
-        Author author = session.find(Author.class, id);
-        session.close();
-        System.out.println(author.getFirst_name());
-        //return author.getFirst_name();
-    }
     public static List<Author> getAllList(){
         String getAllAuthorsHQLQuery = "FROM Author";
         Session session = SessionManager.getSessionFactory().openSession();
@@ -113,6 +105,7 @@ public class AuthorRepository {
             author.setLast_name(last_Name);
             session.save(author);
             transaction.commit();
+            session.close();
         }catch (Exception e){
             if(transaction != null){
                 transaction.rollback();

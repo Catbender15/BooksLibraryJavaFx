@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import me.tadasdev.db.SessionManager;
 import me.tadasdev.repositories.AuthorRepository;
+import me.tadasdev.screens.infoScreens.BookInfo;
 import me.tadasdev.screens.usersScreen.AuthorScreen;
 import me.tadasdev.screens.usersScreen.BookScreen;
 import me.tadasdev.screens.ErrorScreen;
@@ -21,6 +22,7 @@ public class App extends Application {
     AuthorScreen authorScreen = new AuthorScreen();
     BookScreen bookScreen = new BookScreen();
     ErrorScreen errorScreen = new ErrorScreen();
+    BookInfo bookInfo = new BookInfo();
 
 
 
@@ -31,6 +33,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage){
         menuScreen.menuScreen(stage);
+
         //authorScreen.authorsScreen(stage, true, true);
         //authorRepository.deleteById(1);
         //bookScreen.booksScreen(stage);

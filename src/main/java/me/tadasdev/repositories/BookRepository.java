@@ -3,6 +3,7 @@ package me.tadasdev.repositories;
 import me.tadasdev.db.SessionManager;
 import me.tadasdev.users.Book;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 import javax.persistence.Query;
@@ -49,6 +50,23 @@ public class BookRepository {
 
         return bookList;
 
+    }
+
+    public static  void addToBookLibrary(String title, String authorName, String authorSurname, String description){
+        Transaction transaction = null;
+        try{
+            Session session = SessionManager.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Book book = new Book();
+            book.setTitle(title);
+            book.setAuthor(authorName + " " + authorSurname);
+            book.setDescriptions(description);
+            session.save(book);
+            transaction.commit();
+            session.close();
+        }catch (Exception e){
+            System.out.println("Error in add Book: " + e.getMessage());
+        }
     }
 
 }

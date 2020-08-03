@@ -1,4 +1,6 @@
 package me.tadasdev.screens.refactorScreens;
 
-public class addToLibrary {
+public class DeleteFromLibrary {
+
+
 }

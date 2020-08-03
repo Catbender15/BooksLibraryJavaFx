@@ -57,10 +57,12 @@ public class AuthorScreen {
         vBox.getChildren().add(addSearchBar(stage));
         vBox.getChildren().add(tableView);
         vBox.getChildren().add(hBox);
-
+        vBox.setMinSize(500,500);
 
         Scene scene = new Scene(vBox);
         stage.setScene(scene);
+        stage.setMinWidth(500);
+        stage.setMinHeight(500);
         stage.show();
 
     }
@@ -112,7 +114,6 @@ public class AuthorScreen {
                                     AuthorRepository.deleteByObject(author);
                                     ObservableList<Author> authorList = FXCollections.observableArrayList(AuthorRepository.getAllList());
                                     authorTable.setItems(authorList);
-                                    authorTable.getColumns().remove(buttons);
                                 });
 
                             }
