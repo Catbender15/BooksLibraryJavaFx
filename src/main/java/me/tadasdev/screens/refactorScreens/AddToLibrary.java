@@ -1,5 +1,6 @@
 package me.tadasdev.screens.refactorScreens;
 
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +14,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import me.tadasdev.repositories.BookRepository;
 import me.tadasdev.screens.MenuScreen;
+import me.tadasdev.users.Book;
+
+import java.util.List;
 
 
 public class AddToLibrary {
@@ -79,12 +83,30 @@ public class AddToLibrary {
         descriptionField.setMaxWidth(350);
         descriptionField.setWrapText(true);
 
+
         HBox buttonsHBox = new HBox();
 
         Button addButton = new Button("Add");
         addButton.setOnAction(event -> {
             if(!titleField.getText().isEmpty()){
-                bookRepository.addToBookLibrary(titleField.getText(), authorNameField.getText(), authorSurnameField.getText(), descriptionField.getText());
+                Book book = new Book();
+                if(ifTitleExist(titleField.getText())){
+                    bookRepository.addToBookLibrary(titleField.getText(), authorNameField.getText(), authorSurnameField.getText(), descriptionField.getText());
+
+
+                }else{
+                    Label titleError = new Label("The title is already existing");
+                    Scene scene1 = new Scene(titleError);
+                    Stage stage1 = new Stage();
+                    stage1.setScene(scene1);
+                    stage1.setMinHeight(100);
+                    stage1.setMinWidth(100);
+
+                    stage1.initModality(Modality.WINDOW_MODAL);
+                    stage1.initOwner(stage);
+                    stage1.show();
+                    System.out.println("The title is already existing");
+                }
             }else {
                 Label titleError = new Label("Title can't be empty");
                 Scene scene1 = new Scene(titleError);
@@ -95,9 +117,7 @@ public class AddToLibrary {
 
                 stage1.initModality(Modality.WINDOW_MODAL);
                 stage1.initOwner(stage);
-
                 stage1.show();
-
 
                 System.out.println("Title can't be empty");
             }
@@ -121,5 +141,12 @@ public class AddToLibrary {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public boolean ifTitleExist(String title){
+        BookRepository bookRepository = new BookRepository();
+        List<Book> bookList = bookRepository.getListByTitle(title);
+
+        return bookList.isEmpty();
     }
 }

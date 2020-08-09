@@ -2,9 +2,11 @@ package me.tadasdev.screens.usersScreen;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -34,9 +36,9 @@ public class BookScreen {
     TableView<Book> booksTable = new TableView<>();
     private String stackName = "Title";
 
-    public void booksScreen(Stage stage){
+    public void booksScreen(Stage stage, boolean deleteButtonBool){
 
-        TableView bookTableView = this.bookTableView(stage);
+        TableView bookTableView = this.bookTableView(stage, deleteButtonBool);
 
         Button backButton =  new Button("back");
         backButton.setOnAction(event -> {
@@ -45,7 +47,7 @@ public class BookScreen {
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(backButton);
-        vBox.getChildren().add(addSearchBar(stage));
+        vBox.getChildren().add(addSearchBar(stage, deleteButtonBool));
         vBox.getChildren().add(bookTableView);
         vBox.setMinSize(500,500);
 
@@ -57,7 +59,7 @@ public class BookScreen {
 
     }
 
-    public TableView bookTableView(Stage stage){
+    public TableView bookTableView(Stage stage, boolean deleteButtonBool){
         //TableView<Book> booksTable = this.booksTable;
         ObservableList<Book> booksList = this.booksList;
 
@@ -72,13 +74,18 @@ public class BookScreen {
         descriptions.setCellValueFactory(new PropertyValueFactory<>("descriptions"));
         descriptions.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptions.setMinWidth(80);
+        descriptions.setMaxWidth(80);
 
         author.setCellValueFactory(new PropertyValueFactory<>("author"));
         author.setCellFactory(TextFieldTableCell.forTableColumn());
         author.setMinWidth(80);
 
+
         //booksTable.getColumns().setAll(id, deleteButton(), descriptions, book);
         booksTable.getColumns().setAll(id, titleLink(stage), descriptions, author);
+        if(deleteButtonBool){
+            deleteButton();
+        }
         booksTable.prefWidth(20);
         booksTable.setItems(booksList);
 
@@ -139,7 +146,51 @@ public class BookScreen {
 
     }
 
-    public HBox addSearchBar(Stage stage){
+    public void deleteButton(){
+        TableColumn<Book, Void> buttons = new TableColumn("Delete");
+        buttons.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
+
+        Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory
+                = //
+                new Callback<TableColumn<Book, Void>, TableCell<Book, Void>>() {
+                    @Override
+                    public TableCell call(final TableColumn<Book, Void> param) {
+                        final TableCell<Book, Void> cell = new TableCell<Book, Void>() {
+
+                            final Button button123 = new Button("Delete");
+
+                            {
+                                button123.setOnAction((ActionEvent event) -> {
+                                    Book book = getTableView().getItems().get(getIndex());
+                                    BookRepository.deleteByObject(book);
+                                    ObservableList<Book> bookList = FXCollections.observableArrayList(BookRepository.getAllBooksList());
+                                    booksTable.setItems(bookList);
+                                });
+
+                            }
+
+                            @Override
+                            public void updateItem(Void item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+
+                                } else {
+
+                                    setGraphic(button123);
+
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                };
+        buttons.setCellFactory(cellFactory);
+        booksTable.getColumns().add(buttons);
+
+    }
+
+    public HBox addSearchBar(Stage stage, boolean deleteButtonBool){
 
         HBox root = new HBox();
         HBox choiseHBox = new HBox();
@@ -174,7 +225,7 @@ public class BookScreen {
                 booksList = FXCollections.observableArrayList(BookRepository.getListByTitle(searchField.getText()));
             }
             stackName = searchChoiceBox.getValue();
-            booksScreen(stage);
+            booksScreen(stage, deleteButtonBool);
         });
 
         searchField.setOnKeyPressed(event -> {

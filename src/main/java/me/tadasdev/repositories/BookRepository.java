@@ -1,6 +1,7 @@
 package me.tadasdev.repositories;
 
 import me.tadasdev.db.SessionManager;
+import me.tadasdev.users.Author;
 import me.tadasdev.users.Book;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -66,6 +67,40 @@ public class BookRepository {
             session.close();
         }catch (Exception e){
             System.out.println("Error in add Book: " + e.getMessage());
+        }
+    }
+
+    public static void deleteByObject(Book book){
+        Transaction transaction = null;
+        try{
+            Session session = SessionManager.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.delete(book);
+            transaction.commit();
+            session.close();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }else {
+                System.out.println("Error: " + e.getMessage());
+
+            }
+        }
+    }
+    public static void updateByObject(Book book){
+        Transaction transaction = null;
+        try{
+            Session session = SessionManager.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.update(book);
+            transaction.commit();
+            session.close();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }else {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 

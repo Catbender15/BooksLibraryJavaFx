@@ -10,6 +10,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import me.tadasdev.screens.refactorScreens.AddToLibrary;
+import me.tadasdev.screens.refactorScreens.UpdateLibrary;
 import me.tadasdev.screens.usersScreen.AuthorScreen;
 import me.tadasdev.screens.usersScreen.BookScreen;
 
@@ -43,7 +44,7 @@ public class MenuScreen{
         authorsButton.setMinWidth(200);
         authorsButton.setMinHeight(50);
         authorsButton.setOnAction(action -> {
-            authorScreen.authorsScreen(stage);
+            authorScreen.authorsScreen(stage, false, false);
             //System.out.println(stage.isMaximized());
         });
 
@@ -51,7 +52,7 @@ public class MenuScreen{
         booksButton.setMinWidth(200);
         booksButton.setMinHeight(50);
         booksButton.setOnAction(event -> {
-            bookScreen.booksScreen(stage);
+            bookScreen.booksScreen(stage, false);
         });
 
         Button addToLibraryButton = new Button("Add to Library");
@@ -65,18 +66,12 @@ public class MenuScreen{
         updateLibraryButton.setMinWidth(200);
         updateLibraryButton.setMinHeight(50);
         updateLibraryButton.setOnAction(event -> {
-
-        });
-
-        Button deleteLibraryButton = new Button("Delete from Library");
-        deleteLibraryButton.setMinHeight(50);
-        deleteLibraryButton.setMinWidth(200);
-        deleteLibraryButton.setOnAction(event -> {
-
+            UpdateLibrary updateLibrary = new UpdateLibrary();
+            updateLibrary.updateLibrary(stage);
         });
 
         root.getChildren().addAll(menu, authorsButton, booksButton,
-                addToLibraryButton, updateLibraryButton, deleteLibraryButton);
+                addToLibraryButton, updateLibraryButton);
         root.setSpacing(10);
 
         root.setAlignment(Pos.CENTER);

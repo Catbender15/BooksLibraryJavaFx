@@ -1,4 +1,6 @@
 # Books Library
+Project is running on Java 8.
+
 Need first create DB (Data base).
 
 You can find DB Query in booksLibraryQuery.qs
@@ -110,4 +112,4 @@ This Class is starting JavaFX methods.
 ###### Methods:
 * ```main();``` Launch JavaFx methods.
 * ```start();``` Start Menu Screen.
-* ```stop();``` Stopping program and shutdown SessionManager;
+* ```stop();``` Stopping program and shutdown SessionManager.

@@ -8,6 +8,9 @@ import org.hibernate.Transaction;
 import me.tadasdev.users.Author;
 
 import javax.persistence.Query;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 
 public class AuthorRepository {
@@ -71,31 +74,23 @@ public class AuthorRepository {
         }
     }
 
-    public  static  void updateById(int id, String firstName, String lastName){
+    public  static  void updateByObject(Author author){
         Transaction transaction = null;
-
         try{
             Session session = SessionManager.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Author author = session.find(Author.class, id);
-            String oldFirstName = author.getFirst_name();
-            String oldLastName = author.getLast_name();
-            author.setFirst_name(firstName);
-            author.setLast_name(lastName);
             session.update(author);
             transaction.commit();
-            System.out.println("Id: " + id + " was successfully updated from name: \"" + oldFirstName + "\" to: \"" + firstName + "\".");
-            System.out.println("Id: " + id + " was successfully updated from name: \"" + oldLastName + "\" to: \"" + lastName + "\".");
+            session.close();
         }catch (Exception e){
             if(transaction != null){
                 transaction.rollback();
             }else{
-                System.out.println("Id: " + id + " didn't update to: \"" + firstName + "\".");
                 System.out.println("Error: " + e.getMessage());
             }
         }
     }
-    public static void save(String first_name, String last_Name){
+    public static void addAuthor(String first_name, String last_Name){
         Transaction transaction= null;
         try {
             Session session = SessionManager.getSessionFactory().openSession();
@@ -114,6 +109,15 @@ public class AuthorRepository {
             }
         }
     }
+
+    /*public static Author foundAuthroByNameAndSurname(String name, String lastName){
+        Session session = SessionManager.getSessionFactory().openSession();
+        Author author = null;
+        String query = "SELECT id_authors from Author where first_name like " + name + " and last_name like " + lastName;
+        ResultSet rs = session.createQuery(query);
+
+        return  author;
+    }*/
 
 
 
